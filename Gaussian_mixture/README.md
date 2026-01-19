@@ -8,7 +8,8 @@
 - Compared against `sklearn.mixture.GaussianMixture`
 
 # Results
-The original generated mixture is 
+The original generated mixture is\
+
 $$ p(x) = 0.3 \, \mathcal{N}(x \mid -2, 0.16) + 0.5 \, \mathcal{N}(x \mid 0, 1.0) + 0.2 \, \mathcal{N}(x \mid 3, 0.09) $$
 
 The test ran EM-algorithm with 3 different intialisation algorithms: random, k_means and percentile.
@@ -30,7 +31,7 @@ K-means clustering
 
 And also it compared EM-algorithm results with the include in the sklearn.mixture library GaussianMixture class. the results are show in the table below. 
 
-|Component | Source | Weight | Mean | Std |
+| Source | Weight | Mean | Std |
 |---|---|---|---|---|
 | | | Left | | |
 | sklearn | 0.370 | -1.91 | 0.47 |
