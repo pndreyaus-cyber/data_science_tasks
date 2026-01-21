@@ -6,6 +6,7 @@ This project implements EM-algorithm for estimating gaussian mixture parameters 
 
 Gaussian mixture model (GMM) is a probabilistic model, that reperesents an unknow distribution as a weighted sum of Gaussian distributions.
 So the pdf(x) of such a distribution is:
+
 $$ p(\mathbf{x}) = \sum_{i=1}^{k} w_i \cdot \mathcal{N}(\mathbf{x} \mid \mu_i, \sigma_i) $$
 
 To estimate a given sample from unknown distribution with a gaussian mixture, I use EM algorithm
@@ -36,23 +37,23 @@ $$
 
 
 - **M-step**: Update parameters
-    - Update weights:
+Update weights:
 
-    $$ w_k^{(t+1)} = \frac{\sum_{i=1}^N \gamma_{i, k}^{(t)}}{N}$$
+$$ w_k^{(t+1)} = \frac{\sum_{i=1}^N \gamma_{i, k}^{(t)}}{N}$$
 
-    - Update means:
+Update means:
 
-    $$ \mu_k^{(t+1)} = \frac{\sum_{i=1}^N \gamma_{i, k}^{(t)}\cdot x_{i}}{\sum_{i=1}^N \gamma_{i, k}^{(t)}} $$
+$$ \mu_k^{(t+1)} = \frac{\sum_{i=1}^N \gamma_{i, k}^{(t)}\cdot x_{i}}{\sum_{i=1}^N \gamma_{i, k}^{(t)}} $$
 
-    - Update standard deviations:
+Update standard deviations:
 
-    $$\sigma_k^{(t+1)} = \frac{\sum_{i=1}^N \gamma_{i, k}^{(t)}\cdot (x_{i} - \mu_k^{(t+1)})^2}{\sum_{i=1}^N \gamma_{i, k}^{(t)}} $$
+$$\sigma_k^{(t+1)} = \frac{\sum_{i=1}^N \gamma_{i, k}^{(t)}\cdot (x_{i} - \mu_k^{(t+1)})^2}{\sum_{i=1}^N \gamma_{i, k}^{(t)}} $$
 
 - **Stopping criteria**
     - This project iterates EM-steps for a given **N** number of steps
     - Usually log-likelihood convergence is used
 
-    $$ |\ell(\boldsymbol{\theta}^{(t+1)}) - \ell(\boldsymbol{\theta}^{(t)})| < \epsilon $$
+$$ |\ell(\boldsymbol{\theta}^{(t+1)}) - \ell(\boldsymbol{\theta}^{(t)})| < \epsilon $$
 
 
 **Log-likelihood of the model**
@@ -92,7 +93,7 @@ not provide sufficient improvement in data likelihood
 ## Results
 
 ### Validation on Synthetic Data
-In this test `GaussianMixtureAnalyzer` class generates sample of size 1000 from the distribution, which is a gaussian mixture of 3 components:\
+In this test `GaussianMixtureAnalyzer` class generates sample of size 1000 from the distribution, which is a gaussian mixture of 3 components:
 - Component 1: μ₁ = 5, σ₁ = 4, w₁ = 0.7
 - Component 2: μ₂ = 4, σ₂ = 2, w₂ = 0.2  
 - Component 3: μ₃ = 2, σ₃ = 3, w₃ = 0.1
