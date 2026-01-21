@@ -89,18 +89,70 @@ more components generally achieve higher log-likelihood, BIC penalizes
 model complexity and prevents overfitting when additional components do
 not provide sufficient improvement in data likelihood
 
-## Key Results
+## Results
 
 ### Validation on Synthetic Data
-- Successfully recovered parameters from known 3-component mixture
-- Results closely match scikit-learn implementation
-- All initialization methods converge to similar solutions
+In this test `GaussianMixtureAnalyzer` class generates sample of size 1000 from the distribution, which is a gaussian mixture of 3 components:\
+- Component 1: μ₁ = 5, σ₁ = 4, w₁ = 0.7
+- Component 2: μ₂ = 4, σ₂ = 2, w₂ = 0.2  
+- Component 3: μ₃ = 2, σ₃ = 3, w₃ = 0.1
 
-### Real-World Applications
-Applied to forex trading volume analysis (SGD-JPY, USD-CZK):
-- Identified multiple trading regimes in financial data
-- BIC criterion automatically selected optimal model complexity
-- Revealed multimodal distributions in trading volumes
+And then it ran `GaussianMixture_self.fit` with 3 different initialisation strategies. The results are:
+
+!["Generated data"](img/raw_data.png "Generated data")
+
+!["True mixture histogram"](img/true_mixture_histogram.png "True mixture histogram")
+
+!["Data histogram with EM-estimated parameters (Random Initialization)"](img/random_init_mixture_histogram.png "Data histogram with EM-estimated parameters (Random Initialization)")
+
+!["Data histogram with EM-estimated parameters (K-means Initialization)"](img/k_means_init_mixture_histogram.png "Data histogram with EM-estimated parameters (K-means Initialization)")
+
+!["Data histogram with EM-estimated parameters (Percentile-based Initialization)"](img/percentile_init_mixture_histogram.png "Data histogram with EM-estimated parameters (Percentile-based Initialization)")
+
+!["Data histogram with parameters from sklearn.mixture.GaussianMixture"](img/sklearn_mixture_histogram.png "Data histogram with parameters from sklearn.mixture.GaussianMixture")
+
+Here are the parameter values for different models:
+
+!["Real parameters"](img/true_mixture_result.png "Real parameters")
+
+!["EM-estimated parameters (Random Initialization)"](img/random_init_mixture_result.png "EM-estimated parameters (Random Initialization)")
+
+!["EM-estimated parameters (K-means Initialization)"](img/k_means_init_mixture_result.png "EM-estimated parameters (K-means Initialization)")
+
+!["EM-estimated parameters (Percentile-based Initialization)"](img/percentile_init_mixture_result.png "EM-estimated parameters (Percentile-based Initialization)")
+
+!["Parameters estimated using sklearn"](img/sklearn_mixture_result.png "Parameters estimated using sklearn")
+
+#### Conclusion
+* EM Algorithm with K-means initialization has the biggest log-likelihood value (-2705.1). It is even bigger, that the log-likelihood value calculated using real parameters 🙃
+* EM Algorithm with percentile-base initialization has the closest weights and means to the real ones
+* EM Algorithm with K-means initialization and sklearn.GaussianMixture have very close mean and standrard deviation parameters. But those are different to the real ones 
+
+### Experiment using real-world data
+
+**Data Source**: Historical forex data from [Dukascopy](https://www.dukascopy.com/swiss/english/marketwatch/historical/)
+
+**Datasets**:
+* **SGD/JPY** (Singapore Dollar/Japanese Yen) - Log-transformed tick volumes, 1-minute interval, December 16, 2024, BID prices
+* **USD/CZK** (US Dollar/Czech Koruna) - Log-transformed tick volumes, 1-minute interval, December 16, 2024, BID prices
+
+**What is "Tick Volume"?**  
+Tick volume counts the number of price updates (ticks) per time interval. Since forex is decentralized, real trade volumes aren't publicly available. However, tick volume serves as a good proxy for market activity: high tick volume indicates active trading and price movement, while low tick volume suggests quiet market conditions.
+
+**Why Log-Transform?**  
+Raw tick volumes vary drastically (from 1-2 ticks to thousands), creating a highly skewed distribution. Taking the logarithm compresses this scale, making the data more symmetric and suitable for Gaussian mixture modeling
+
+The Gaussian Mixture Model was applied to the distribution of log-transformed trading volumes for these currency pairs to identify underlying patterns and cluster structures in market activity. As we do not know the component number, BIC analyzis was used
+
+!["SGD/JPY EM algorithm results (using BIC)"](img/sgd_jpy_plots.png "SGD/JPY EM algorithm results (using BIC)")
+!["SGD/JPY EM-estimated parameters (using BIC)"](img/sgd_jpy_result.png "SGD/JPY EM-estimated parameters (using BIC)")
+
+!["USD/CZK EM algorithm results (using BIC)"](img/usd_czk_plots.png "USD/CZK EM algorithm results (using BIC)")
+!["USD/CZK EM-estimated results (using BIC)"](img/usd_czk_result.png "USD/CZK EM-estimated results (using BIC)")
+
+#### Conclusion
+* Real-world data can sometimes be estimated with just single Gaussian distribution (as we can see for SGD/JPY)
+* 
 
 ## Skills Demonstrated
 
